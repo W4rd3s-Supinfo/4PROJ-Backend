@@ -1,2 +1,8 @@
 # 4API 4PROJ
-blablabla toi même tu sais
+Pour lancer le projet
+
+npm i
+
+npm run build
+
+npm run start
