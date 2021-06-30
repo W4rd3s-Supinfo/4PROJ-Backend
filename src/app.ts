@@ -15,6 +15,7 @@ import WarehousesRoutes from './api/warehouses/warehouses.routes';
 import OrdersRoutes from './api/orders/orders.routes';
 import ProductDetailsRoutes from './api/productDetails/productDetails.routes';
 import ProductItemsRoutes from './api/productItems/productItems.routes';
+import AuthRoutes from './api/auth/auth.routes';
 
 const app: express.Application = express();
 const server: http.Server = http.createServer(app);
@@ -47,12 +48,12 @@ routes.push(new WarehousesRoutes(app));
 routes.push(new OrdersRoutes(app));
 routes.push(new ProductDetailsRoutes(app));
 routes.push(new ProductItemsRoutes(app));
+routes.push(new AuthRoutes(app));
 
 server.listen(envVars.serverPort, () => {
   routes.forEach((route: CommonRoutesConfig) => {
     debugLog(`Routes configured for ${route.getName()}`);
   });
-
   // eslint-disable-next-line no-console
   console.log(`Server running on ${envVars.serverPort} port`);
 });

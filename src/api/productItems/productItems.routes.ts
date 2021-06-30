@@ -6,6 +6,7 @@ import PermissionFlag from '../../common/middleware/permission/permissionFlag.en
 import ProductItemsController from './productItems.controller';
 import BodyValidationMiddleware from '../../common/middleware/bodyValidation.middleware';
 import UrlParamsExtractorMiddleware from '../../common/middleware/urlParamsExtractor.middleware';
+import JwtMiddleware from '../../common/middleware/permission/jwt.middleware';
 
 class ProductItemsRoutes extends CommonRoutesConfig {
   constructor(app: express.Application) {
@@ -15,7 +16,7 @@ class ProductItemsRoutes extends CommonRoutesConfig {
   configureRoutes(): express.Application {
     this.app.route('/productItems')
       .get([
-        /* jwt */
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(
           PermissionFlag.PRODUCER_PERMISSION
           | PermissionFlag.SELLER_PERMISSION
@@ -37,7 +38,7 @@ class ProductItemsRoutes extends CommonRoutesConfig {
 
     this.app.route('/productItems/:productItemId')
       .all([
-        /* jwt */
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(
           PermissionFlag.PRODUCER_PERMISSION
           | PermissionFlag.SELLER_PERMISSION

@@ -6,6 +6,7 @@ import PermissionFlag from '../../common/middleware/permission/permissionFlag.en
 import OrdersController from './orders.controller';
 import BodyValidationMiddleware from '../../common/middleware/bodyValidation.middleware';
 import UrlParamsExtractorMiddleware from '../../common/middleware/urlParamsExtractor.middleware';
+import JwtMiddleware from '../../common/middleware/permission/jwt.middleware';
 
 class OrdersRoutes extends CommonRoutesConfig {
   constructor(app: express.Application) {
@@ -15,7 +16,7 @@ class OrdersRoutes extends CommonRoutesConfig {
   configureRoutes(): express.Application {
     this.app.route('/orders')
       .get([
-        /* jwt */
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(
           PermissionFlag.CLIENT_PERMISSION
           | PermissionFlag.PRODUCER_PERMISSION
@@ -38,7 +39,7 @@ class OrdersRoutes extends CommonRoutesConfig {
 
     this.app.route('/orders/:orderId')
       .all([
-        /* jwt */
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(
           PermissionFlag.CLIENT_PERMISSION
           | PermissionFlag.PRODUCER_PERMISSION

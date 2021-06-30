@@ -6,6 +6,7 @@ import PermissionFlag from '../../common/middleware/permission/permissionFlag.en
 import TransportTypesController from './transportTypes.controller';
 import BodyValidationMiddleware from '../../common/middleware/bodyValidation.middleware';
 import UrlParamsExtractorMiddleware from '../../common/middleware/urlParamsExtractor.middleware';
+import JwtMiddleware from '../../common/middleware/permission/jwt.middleware';
 
 class transportTypesRoutes extends CommonRoutesConfig {
   constructor(app: express.Application) {
@@ -15,7 +16,7 @@ class transportTypesRoutes extends CommonRoutesConfig {
   configureRoutes(): express.Application {
     this.app.route('/transporttypes')
       .get([
-        /* jwt */
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(
           PermissionFlag.PRODUCER_PERMISSION
           | PermissionFlag.SELLER_PERMISSION
@@ -35,7 +36,7 @@ class transportTypesRoutes extends CommonRoutesConfig {
 
     this.app.route('/users/:transportId')
       .all([
-        /* jwt */
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(
           PermissionFlag.PRODUCER_PERMISSION
           | PermissionFlag.SELLER_PERMISSION

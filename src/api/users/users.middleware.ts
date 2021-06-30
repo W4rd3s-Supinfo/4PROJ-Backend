@@ -1,8 +1,5 @@
 import express from 'express';
-import debug from 'debug';
 import UserService from './users.service';
-
-const log: debug.IDebugger = debug('app:users-middleware');
 
 class UsersMiddleware {
   async validateUserExists(

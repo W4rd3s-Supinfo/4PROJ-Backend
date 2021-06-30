@@ -14,6 +14,7 @@ const envVarsSchema: joi.ObjectSchema = joi
     DB_USER: joi.string().required(),
     DB_PASSWORD: joi.string().required(),
     SALT_ROUNDS: joi.number().positive().required(),
+    JWT_SECRET: joi.string().required,
   })
   .unknown();
 
@@ -30,4 +31,5 @@ export default {
   databaseUser: envVars.DB_USER,
   databasePassword: envVars.DB_PASSWORD,
   saltRound: envVars.SALT_ROUNDS,
+  jwtSecret: envVars.JWT_SECRET,
 };

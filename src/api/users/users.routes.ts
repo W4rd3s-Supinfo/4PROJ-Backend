@@ -7,6 +7,7 @@ import PermissionMiddleware from '../../common/middleware/permission/permission.
 import PermissionFlag from '../../common/middleware/permission/permissionFlag.enum';
 import BodyValidationMiddleware from '../../common/middleware/bodyValidation.middleware';
 import UrlParamsExtractorMiddleware from '../../common/middleware/urlParamsExtractor.middleware';
+import JwtMiddleware from '../../common/middleware/permission/jwt.middleware';
 
 class UsersRoutes extends CommonRoutesConfig {
   constructor(app: express.Application) {
@@ -15,7 +16,8 @@ class UsersRoutes extends CommonRoutesConfig {
 
   configureRoutes(): express.Application {
     this.app.route('/users')
-      .get([/* jwt */
+      .get([
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(PermissionFlag.ALL_PERMISSION),
         UsersController.listUsers,
       ])
@@ -23,6 +25,7 @@ class UsersRoutes extends CommonRoutesConfig {
         body('fullName').isString(),
         body('email').isEmail(),
         body('password').isLength({ min: 5 }).withMessage('Must include password (5+ characters)'),
+        body('permissionFlag').isInt({ min: 1, max: 4 }),
         BodyValidationMiddleware.verifyBodyFieldsErrors,
         UsersMiddleware.validateSameEmailDoesntExist,
         UsersController.createUser,
@@ -33,7 +36,7 @@ class UsersRoutes extends CommonRoutesConfig {
     this.app.route('/users/:userId')
       .all([
         UsersMiddleware.validateUserExists,
-        /* jwt */
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.onlySameUserOrAdminCanDoThisAction,
       ])
       .get(UsersController.getUserById)

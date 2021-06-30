@@ -6,6 +6,7 @@ import PermissionFlag from '../../common/middleware/permission/permissionFlag.en
 import FridgesController from './fridges.controller';
 import BodyValidationMiddleware from '../../common/middleware/bodyValidation.middleware';
 import UrlParamsExtractorMiddleware from '../../common/middleware/urlParamsExtractor.middleware';
+import JwtMiddleware from '../../common/middleware/permission/jwt.middleware';
 
 class FridgesRoutes extends CommonRoutesConfig {
   constructor(app: express.Application) {
@@ -15,7 +16,7 @@ class FridgesRoutes extends CommonRoutesConfig {
   configureRoutes(): express.Application {
     this.app.route('/fridges')
       .get([
-        /* jwt */
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(
           PermissionFlag.CLIENT_PERMISSION
           | PermissionFlag.ALL_PERMISSION,
@@ -34,7 +35,7 @@ class FridgesRoutes extends CommonRoutesConfig {
 
     this.app.route('/fridges/:fridgeId')
       .all([
-        /* jwt */
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(
           PermissionFlag.CLIENT_PERMISSION
           | PermissionFlag.ALL_PERMISSION,
