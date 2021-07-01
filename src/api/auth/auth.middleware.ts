@@ -14,7 +14,6 @@ class AuthMiddleware {
     if (user) {
       const passwordHash = user.password;
       if (await bcrypt.compare(req.body.password, passwordHash)) {
-        req.body.user = user;
         return next();
       }
     }
