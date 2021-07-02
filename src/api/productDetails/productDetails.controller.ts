@@ -6,18 +6,26 @@ const log: debug.IDebugger = debug('app:ProductDetails-controller');
 
 class ProductDetailsController {
   async listProductDetails(req: express.Request, res: express.Response) {
-    const productDetails = await ProductDetailsService.list();
+    let productDetails;
+    if (!req.query.owner) {
+      productDetails = await ProductDetailsService
+        .list(
+          parseInt(req.query.limit as string, 10),
+          parseInt(req.query.page as string, 10),
+        );
+    } else {
+      productDetails = await ProductDetailsService.readByProducer(
+          req.query.owner as string,
+          parseInt(req.query.limit as string, 10),
+          parseInt(req.query.page as string, 10),
+      );
+    }
     res.status(200).send(productDetails);
   }
 
   async getProductDetailById(req: express.Request, res: express.Response) {
     const productDetail = await ProductDetailsService.readById(req.body.id);
     res.status(200).send(productDetail);
-  }
-
-  async getProductDetailsByProducer(req: express.Request, res: express.Response) {
-    const productDetails = await ProductDetailsService.readByProducer(req.body.producerId);
-    res.status(200).send(productDetails);
   }
 
   async createProductDetail(req: express.Request, res: express.Response) {
@@ -38,6 +46,11 @@ class ProductDetailsController {
   async removeProductDetail(req: express.Request, res: express.Response) {
     log(await ProductDetailsService.deleteById(req.body.id));
     res.status(204).send();
+  }
+
+  async getCount(req: express.Request, res: express.Response) {
+    const count = await ProductDetailsService.count();
+    res.status(200).send({ count });
   }
 }
 

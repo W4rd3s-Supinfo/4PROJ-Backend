@@ -1,34 +1,38 @@
 import CRUD from '../../common/interfaces/crud.interface';
-import TransportTypeModel from '../../models/ProductDetail.model';
+import ProductDetailModel from '../../models/ProductDetail.model';
 import { CreateProductDetailDto, PatchProductDetailDto, PutProductDetailDto } from './productDetails.dto';
 
 class ProductDetailsService implements CRUD {
   async create(ressource: CreateProductDetailDto) {
-    return TransportTypeModel.addProductDetail(ressource);
+    return ProductDetailModel.addProductDetail(ressource);
   }
 
   async patchById(id: string, ressource: PatchProductDetailDto) {
-    return TransportTypeModel.updateProductDetailById(id, ressource);
+    return ProductDetailModel.updateProductDetailById(id, ressource);
   }
 
   async putById(id: string, ressource: PutProductDetailDto) {
-    return TransportTypeModel.updateProductDetailById(id, ressource);
+    return ProductDetailModel.updateProductDetailById(id, ressource);
   }
 
   async deleteById(id: string) {
-    return TransportTypeModel.removeProductDetailById(id);
+    return ProductDetailModel.removeProductDetailById(id);
   }
 
-  async list() {
-    return TransportTypeModel.getProductDetails();
+  async list(limit:number, page:number) {
+    return ProductDetailModel.getProductDetails(limit, page);
   }
 
   async readById(id: string) {
-    return TransportTypeModel.getProductDetailById(id);
+    return ProductDetailModel.getProductDetailById(id);
   }
 
-  async readByProducer(id: string) {
-    return TransportTypeModel.getProductDetailByProducer(id);
+  async readByProducer(producerId: string, limit: number, page: number) {
+    return ProductDetailModel.getProductDetailByProducer(producerId, limit, page);
+  }
+
+  async count() {
+    return ProductDetailModel.getCount();
   }
 }
 

@@ -1,5 +1,5 @@
 import express from 'express';
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 import CommonRoutesConfig from '../../common/route.config';
 import PermissionMiddleware from '../../common/middleware/permission/permission.middleware';
 import PermissionFlag from '../../common/middleware/permission/permissionFlag.enum';
@@ -16,6 +16,10 @@ class ProductDetailsRoutes extends CommonRoutesConfig {
   configureRoutes(): express.Application {
     this.app.route('/productDetails')
       .get([
+        query('limit').isInt().optional(),
+        query('page').default(0).isInt({ min: 0 }),
+        query('owner').isString().optional(),
+        BodyValidationMiddleware.verifyBodyFieldsErrors,
         JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(
           PermissionFlag.CLIENT_PERMISSION
@@ -34,6 +38,17 @@ class ProductDetailsRoutes extends CommonRoutesConfig {
         BodyValidationMiddleware.verifyBodyFieldsErrors,
         ProductDetailsController.createProductDetail,
       ]);
+
+    this.app.get('/productDetails/count', [
+      JwtMiddleware.validJWTNeeded,
+      PermissionMiddleware.permissionFlagRequired(
+        PermissionFlag.CLIENT_PERMISSION
+        | PermissionFlag.PRODUCER_PERMISSION
+        | PermissionFlag.SELLER_PERMISSION
+        | PermissionFlag.ALL_PERMISSION,
+      ),
+      ProductDetailsController.getCount,
+    ]);
 
     this.app.param('productDetailId', UrlParamsExtractorMiddleware.urlParamsExtractor(['productDetailId'], ['id']));
 
@@ -81,19 +96,6 @@ class ProductDetailsRoutes extends CommonRoutesConfig {
       ),
       ProductDetailsController.patchProductDetail,
     ]);
-
-    this.app.param('producerId', UrlParamsExtractorMiddleware.urlParamsExtractor(['producerId'], ['producerId']));
-
-    this.app.route('/productDetails/:producerId')
-      .get([
-        PermissionMiddleware.permissionFlagRequired(
-          PermissionFlag.CLIENT_PERMISSION
-          | PermissionFlag.PRODUCER_PERMISSION
-          | PermissionFlag.SELLER_PERMISSION
-          | PermissionFlag.ALL_PERMISSION,
-        ),
-        ProductDetailsController.getProductDetailsByProducer,
-      ]);
 
     return this.app;
   }

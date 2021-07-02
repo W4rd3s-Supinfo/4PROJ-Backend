@@ -82,7 +82,7 @@ class WarehousesRoutes extends CommonRoutesConfig {
 
     this.app.route('/warehouses/user/:userId')
       .get([
-        query('populate').isBoolean().default(false),
+        query('populate').isBoolean().default(false).optional(),
         BodyValidationMiddleware.verifyBodyFieldsErrors,
         JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(

@@ -46,16 +46,26 @@ class ProductDetailModel {
     return this.ProductDetail.deleteOne({ _id }).exec();
   }
 
-  async getProductDetails() {
-    return this.ProductDetail.find().exec();
+  async getProductDetails(limit: number, page: number) {
+    return this.ProductDetail.find()
+      .limit(limit)
+      .skip(limit * page)
+      .exec();
   }
 
   async getProductDetailById(_id: string) {
     return this.ProductDetail.findOne({ _id }).exec();
   }
 
-  async getProductDetailByProducer(producerId: string) {
-    return this.ProductDetail.find({ producerId }).exec();
+  async getProductDetailByProducer(producerId: string, limit: number, page: number) {
+    return this.ProductDetail.find({ producerId })
+      .limit(limit)
+      .skip(limit * page)
+      .exec();
+  }
+
+  async getCount() {
+    return this.ProductDetail.countDocuments({}).exec();
   }
 }
 
