@@ -1,5 +1,5 @@
 import express from 'express';
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 import CommonRoutesConfig from '../../common/route.config';
 import PermissionMiddleware from '../../common/middleware/permission/permission.middleware';
 import PermissionFlag from '../../common/middleware/permission/permissionFlag.enum';
@@ -33,6 +33,31 @@ class ProductItemsRoutes extends CommonRoutesConfig {
         BodyValidationMiddleware.verifyBodyFieldsErrors,
         ProductItemsController.createProductItem,
       ]);
+
+    this.app.get('/productItems/countByDetailId', [
+      query('detailId').isString(),
+      BodyValidationMiddleware.verifyBodyFieldsErrors,
+      JwtMiddleware.validJWTNeeded,
+      PermissionMiddleware.permissionFlagRequired(
+        PermissionFlag.PRODUCER_PERMISSION
+        | PermissionFlag.SELLER_PERMISSION
+        | PermissionFlag.ALL_PERMISSION,
+      ),
+      ProductItemsController.countByDetailId,
+    ]);
+
+    this.app.delete('/productItems/deleteByDetailId', [
+      query('detailId').isString(),
+      query('count').isInt().optional(),
+      BodyValidationMiddleware.verifyBodyFieldsErrors,
+      JwtMiddleware.validJWTNeeded,
+      PermissionMiddleware.permissionFlagRequired(
+        PermissionFlag.PRODUCER_PERMISSION
+        | PermissionFlag.SELLER_PERMISSION
+        | PermissionFlag.ALL_PERMISSION,
+      ),
+      ProductItemsController.removeByDetailId,
+    ]);
 
     this.app.param('productItemId', UrlParamsExtractorMiddleware.urlParamsExtractor(['productItemId'], ['id']));
 

@@ -1,30 +1,38 @@
 import CRUD from '../../common/interfaces/crud.interface';
-import TransportTypeModel from '../../models/ProductItem.model';
+import ProductItemModel from '../../models/ProductItem.model';
 import { CreateProductItemDto, PatchProductItemDto, PutProductItemDto } from './productItems.dto';
 
 class ProductItemsService implements CRUD {
   async create(ressource: CreateProductItemDto) {
-    return TransportTypeModel.addProductItem(ressource);
+    return ProductItemModel.addProductItem(ressource);
   }
 
   async patchById(id: string, ressource: PatchProductItemDto) {
-    return TransportTypeModel.updateProductItemById(id, ressource);
+    return ProductItemModel.updateProductItemById(id, ressource);
   }
 
   async putById(id: string, ressource: PutProductItemDto) {
-    return TransportTypeModel.updateProductItemById(id, ressource);
+    return ProductItemModel.updateProductItemById(id, ressource);
   }
 
   async deleteById(id: string) {
-    return TransportTypeModel.removeProductItemById(id);
+    return ProductItemModel.removeProductItemById(id);
   }
 
   async list() {
-    return TransportTypeModel.getProductItems();
+    return ProductItemModel.getProductItems();
   }
 
   async readById(id: string) {
-    return TransportTypeModel.getProductItemById(id);
+    return ProductItemModel.getProductItemById(id);
+  }
+
+  async countByDetailId(detailId: string) {
+    return ProductItemModel.countByProductDetailId(detailId);
+  }
+
+  async removeByDetailId(detailId: string, count: number) {
+    return ProductItemModel.removeByProductDetailId(detailId, count);
   }
 }
 

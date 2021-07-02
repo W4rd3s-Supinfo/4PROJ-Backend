@@ -1,6 +1,7 @@
 import express from 'express';
 import debug from 'debug';
 import ProductItemsService from './productItems.service';
+import ProductDetailsService from '../productDetails/productDetails.service';
 
 const log: debug.IDebugger = debug('app:ProductItems-controller');
 
@@ -32,6 +33,16 @@ class ProductItemsController {
 
   async removeProductItem(req: express.Request, res: express.Response) {
     log(await ProductItemsService.deleteById(req.body.id));
+    res.status(204).send();
+  }
+
+  async countByDetailId(req: express.Request, res: express.Response) {
+    const count = await ProductItemsService.countByDetailId(req.query.detailId as string);
+    res.status(200).send({ count });
+  }
+
+  async removeByDetailId(req: express.Request, res: express.Response) {
+    log(await ProductItemsService.removeByDetailId(req.query.detailId as string, parseInt(req.query.count as string, 10)));
     res.status(204).send();
   }
 }

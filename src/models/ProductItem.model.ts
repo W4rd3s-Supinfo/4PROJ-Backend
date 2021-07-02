@@ -55,6 +55,18 @@ class ProductItemModel {
   async getProductItemById(_id: string) {
     return this.ProductItem.findOne({ _id }).exec();
   }
+
+  async countByProductDetailId(detailId: string) {
+    return this.ProductItem.countDocuments({ detailId }).exec();
+  }
+
+  async removeByProductDetailId(detailId: string, count: number) {
+    return this.ProductItem.find({ detailId }).select('_id').limit(count)
+      .exec((err: any, docs: any) => {
+        const ids = docs.map((doc: any) => doc._id);
+        this.ProductItem.deleteMany({ _id: { $in: ids } }).exec();
+      });
+  }
 }
 
 export default new ProductItemModel();
