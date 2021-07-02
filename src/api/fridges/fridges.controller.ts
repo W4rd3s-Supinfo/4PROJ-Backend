@@ -6,17 +6,17 @@ const log: debug.IDebugger = debug('app:Fridges-controller');
 
 class FridgesController {
   async listFridges(req: express.Request, res: express.Response) {
-    const fridges = FridgesService.list();
+    const fridges = await FridgesService.list();
     res.status(200).send(fridges);
   }
 
   async getFridgeById(req: express.Request, res: express.Response) {
-    const fridge = FridgesService.readById(req.body.id);
+    const fridge = await FridgesService.readById(req.body.id);
     res.status(200).send(fridge);
   }
 
   async getFridgesByOwner(req: express.Request, res: express.Response) {
-    const fridges = FridgesService.readByOwner(req.body.userId);
+    const fridges = await FridgesService.readByOwner(req.body.userId);
     res.status(200).send(fridges);
   }
 

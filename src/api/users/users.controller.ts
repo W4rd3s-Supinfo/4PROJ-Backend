@@ -6,12 +6,12 @@ const log: debug.IDebugger = debug('app:Users-controller');
 
 class UsersController {
   async listUsers(req: express.Request, res: express.Response) {
-    const users = UsersService.list();
+    const users = await UsersService.list();
     res.status(200).send(users);
   }
 
   async getUserById(req: express.Request, res: express.Response) {
-    const user = UsersService.readById(req.body.id);
+    const user = await UsersService.readById(req.body.id);
     res.status(200).send(user);
   }
 

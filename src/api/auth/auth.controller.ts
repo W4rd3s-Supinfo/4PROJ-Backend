@@ -13,9 +13,7 @@ class AuthController {
     try {
       const user = await UserService.getUserByEmail(req.body.email);
       console.log(user._doc);
-      const token = jwt.sign(user._doc, envVars.jwtSecret, {
-        expiresIn: tokenExpirationInSeconds,
-      });
+      const token = jwt.sign(user._doc, envVars.jwtSecret /* {expiresIn: tokenExpirationInSeconds} */);
       return res
         .status(201)
         .send(token);

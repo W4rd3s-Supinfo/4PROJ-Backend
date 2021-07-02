@@ -25,6 +25,7 @@ const debugLog: debug.IDebugger = debug('app');
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
+app.disable('etag');
 
 const loggerOptions: expressWinston.LoggerOptions = {
   transports: [new winston.transports.Console()],

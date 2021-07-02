@@ -12,8 +12,8 @@ class CommonPermissionMiddleware {
       next: express.NextFunction,
     ) => {
       try {
-        const userPermissionFlags = parseInt(res.locals.jwt.permissionFlags, 10);
-        if (userPermissionFlags & requiredPermissionFlag) {
+        const userPermissionFlag = parseInt(res.locals.jwt.permissionFlag, 10);
+        if (userPermissionFlag & requiredPermissionFlag) {
           return next();
         }
         return res.sendStatus(403);
@@ -30,7 +30,7 @@ class CommonPermissionMiddleware {
     next: express.NextFunction,
   ) {
     try {
-      const userPermissionFlags = parseInt(res.locals.jwt.permissionFlags, 10);
+      const userPermissionFlag = parseInt(res.locals.jwt.permissionFlag, 10);
       if (
         req.params
         && req.params.userId
@@ -38,7 +38,7 @@ class CommonPermissionMiddleware {
       ) {
         return next();
       }
-      if (userPermissionFlags & PermissionFlag.ALL_PERMISSION) {
+      if (userPermissionFlag & PermissionFlag.ALL_PERMISSION) {
         return next();
       }
       return res.sendStatus(403);

@@ -6,22 +6,22 @@ const log: debug.IDebugger = debug('app:Orders-controller');
 
 class OrdersController {
   async listOrders(req: express.Request, res: express.Response) {
-    const orders = OrdersService.list();
+    const orders = await OrdersService.list();
     res.status(200).send(orders);
   }
 
   async getOrderById(req: express.Request, res: express.Response) {
-    const order = OrdersService.readById(req.body.id);
+    const order = await OrdersService.readById(req.body.id);
     res.status(200).send(order);
   }
 
   async getOrdersByUser(req: express.Request, res: express.Response) {
-    const orders = OrdersService.readByUser(req.body.id);
+    const orders = await OrdersService.readByUser(req.body.id);
     res.status(200).send(orders);
   }
 
   async getOrdersByStatus(req: express.Request, res: express.Response) {
-    const orders = OrdersService.readByStatus(req.body.status);
+    const orders = await OrdersService.readByStatus(req.body.status);
     res.status(200).send(orders);
   }
 

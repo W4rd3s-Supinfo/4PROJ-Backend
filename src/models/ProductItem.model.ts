@@ -5,14 +5,16 @@ import { CreateProductItemDto, PatchProductItemDto, PutProductItemDto } from '..
 const log: debug.IDebugger = debug('app:ProductItem-model');
 
 class ProductItemModel {
-  Schema = mongooseService.getMongoose().Schema
+  Mongoose = mongooseService.getMongoose();
+
+  Schema = this.Mongoose.Schema;
 
   productItemSchema = new this.Schema({
     destroyed: { type: Boolean, default: false },
     totalCarbon: Number,
     expirationDate: Date,
     marketPrice: Number,
-    detailId: String,
+    detailId: { type: this.Mongoose.Types.ObjectId, ref: 'ProductDetails' },
   }, {
     timestamps: true,
   })

@@ -1,5 +1,5 @@
 import express from 'express';
-import { body } from 'express-validator';
+import { body, query } from 'express-validator';
 import CommonRoutesConfig from '../../common/route.config';
 import PermissionMiddleware from '../../common/middleware/permission/permission.middleware';
 import PermissionFlag from '../../common/middleware/permission/permissionFlag.enum';
@@ -80,8 +80,11 @@ class WarehousesRoutes extends CommonRoutesConfig {
 
     this.app.param('userId', UrlParamsExtractorMiddleware.urlParamsExtractor(['userId'], ['userId']));
 
-    this.app.route('/warehouses/:userId')
+    this.app.route('/warehouses/user/:userId')
       .get([
+        query('populate').isBoolean().default(false),
+        BodyValidationMiddleware.verifyBodyFieldsErrors,
+        JwtMiddleware.validJWTNeeded,
         PermissionMiddleware.permissionFlagRequired(
           PermissionFlag.PRODUCER_PERMISSION
           | PermissionFlag.SELLER_PERMISSION

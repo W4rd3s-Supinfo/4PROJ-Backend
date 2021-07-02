@@ -27,8 +27,8 @@ class WarehousesService implements CRUD {
     return WarehouseModel.getWarehouseById(id);
   }
 
-  async readByOwner(id: string) {
-    return WarehouseModel.getWarehouseByOwner(id);
+  async readByOwner(id: string, populate: boolean) {
+    return WarehouseModel.getWarehouseByOwner(id, populate);
   }
 }
 

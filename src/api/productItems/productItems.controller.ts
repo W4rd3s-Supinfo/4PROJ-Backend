@@ -6,12 +6,12 @@ const log: debug.IDebugger = debug('app:ProductItems-controller');
 
 class ProductItemsController {
   async listProductItems(req: express.Request, res: express.Response) {
-    const productItems = ProductItemsService.list();
+    const productItems = await ProductItemsService.list();
     res.status(200).send(productItems);
   }
 
   async getProductItemById(req: express.Request, res: express.Response) {
-    const productItem = ProductItemsService.readById(req.body.id);
+    const productItem = await ProductItemsService.readById(req.body.id);
     res.status(200).send(productItem);
   }
 

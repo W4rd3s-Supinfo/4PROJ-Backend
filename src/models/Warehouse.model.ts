@@ -5,7 +5,9 @@ import { CreateWarehouseDto, PatchWarehouseDto, PutWarehouseDto } from '../api/w
 const log: debug.IDebugger = debug('app:Warehouse-model');
 
 class WarehouseModel {
-  Schema = mongooseService.getMongoose().Schema
+  Mongoose = mongooseService.getMongoose();
+
+  Schema = this.Mongoose.Schema;
 
   warehouseSchema = new this.Schema({
     name: String,
@@ -14,7 +16,7 @@ class WarehouseModel {
     gpsCord: String,
     productList: [
       {
-        productId: String,
+        productId: { type: this.Mongoose.Types.ObjectId, ref: 'ProductItems' },
         quantity: Number,
       },
     ],
@@ -56,8 +58,31 @@ class WarehouseModel {
     return this.Warehouse.findOne({ _id }).exec();
   }
 
-  async getWarehouseByOwner(ownerId: string) {
+  async getWarehouseByOwner(ownerId: string, populate: boolean) {
+    if (populate) {
+      return this.Warehouse.find({ ownerId }).populate({
+        path: 'productList',
+        populate: {
+          path: 'productId',
+          populate: {
+            path: 'detailId',
+          },
+        },
+      }).exec();
+    }
     return this.Warehouse.find({ ownerId }).exec();
+  }
+
+  async addProduct(ownerId: string, productId: string, stock: string) {
+    this.Warehouse.updateOne({ ownerId }, { productList: { $push: { productId } } }).exec();
+  }
+
+  async updateProductStock(ownerId: string, productId: string) {
+    this.Warehouse.updateMany({ ownerId }, { productList: { $pull: { productId } } }).exec();
+  }
+
+  async removeProduct(ownerId: string, productId: string) {
+    this.Warehouse.updateMany({ ownerId }, { productList: { $pull: { productId } } }).exec();
   }
 }
 

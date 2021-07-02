@@ -6,12 +6,12 @@ const log: debug.IDebugger = debug('app:TransportTypes-controller');
 
 class TransportTypesController {
   async listTransportTypes(req: express.Request, res: express.Response) {
-    const transportTypes = TransportTypesService.list();
+    const transportTypes = await TransportTypesService.list();
     res.status(200).send(transportTypes);
   }
 
   async getTransportTypeById(req: express.Request, res: express.Response) {
-    const transportType = TransportTypesService.readById(req.body.id);
+    const transportType = await TransportTypesService.readById(req.body.id);
     res.status(200).send(transportType);
   }
 

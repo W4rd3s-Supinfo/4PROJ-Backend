@@ -6,17 +6,17 @@ const log: debug.IDebugger = debug('app:Warehouses-controller');
 
 class WarehousesController {
   async listWarehouses(req: express.Request, res: express.Response) {
-    const warehouses = WarehousesService.list();
+    const warehouses = await WarehousesService.list();
     res.status(200).send(warehouses);
   }
 
   async getWarehouseById(req: express.Request, res: express.Response) {
-    const warehouse = WarehousesService.readById(req.body.id);
+    const warehouse = await WarehousesService.readById(req.body.id);
     res.status(200).send(warehouse);
   }
 
   async getWarehousesByOwner(req: express.Request, res: express.Response) {
-    const warehouses = WarehousesService.readByOwner(req.body.userId);
+    const warehouses = await WarehousesService.readByOwner(req.body.userId, (req.query.populate === 'true'));
     res.status(200).send(warehouses);
   }
 
