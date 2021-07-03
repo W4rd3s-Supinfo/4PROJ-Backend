@@ -31,10 +31,10 @@ class ProductDetailsRoutes extends CommonRoutesConfig {
       ])
       .post([
         body('name').isString(),
-        body('ownerId').isString(),
-        body('gpsCord').isString(),
-        body('maxCapacity').isNumeric(),
-        body('productList').isArray(),
+        body('baseCarbon').isNumeric(),
+        body('producerId').isString(),
+        body('producerPrice').isNumeric(),
+        body('composition').isString(),
         BodyValidationMiddleware.verifyBodyFieldsErrors,
         ProductDetailsController.createProductDetail,
       ]);
@@ -67,10 +67,10 @@ class ProductDetailsRoutes extends CommonRoutesConfig {
 
     this.app.put('/productDetails/:productDetailId', [
       body('name').isString(),
-      body('ownerId').isString(),
-      body('gpsCord').isString(),
-      body('maxCapacity').isNumeric(),
-      body('productList').isArray(),
+      body('baseCarbon').isNumeric(),
+      body('producerId').isString(),
+      body('producerPrice').isNumeric(),
+      body('composition').isString(),
       BodyValidationMiddleware.verifyBodyFieldsErrors,
       PermissionMiddleware.permissionFlagRequired(
         PermissionFlag.CLIENT_PERMISSION
@@ -82,11 +82,11 @@ class ProductDetailsRoutes extends CommonRoutesConfig {
     ]);
 
     this.app.patch('/productDetails/:productDetailId', [
-      body('name').isString().optional(),
-      body('ownerId').isString().optional(),
-      body('gpsCord').isString().optional(),
-      body('maxCapacity').isNumeric().optional(),
-      body('productList').isArray().optional(),
+      body('name').isString(),
+      body('baseCarbon').isNumeric(),
+      body('producerId').isString(),
+      body('producerPrice').isNumeric(),
+      body('composition').isString(),
       BodyValidationMiddleware.verifyBodyFieldsErrors,
       PermissionMiddleware.permissionFlagRequired(
         PermissionFlag.CLIENT_PERMISSION
