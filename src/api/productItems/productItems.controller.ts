@@ -45,6 +45,23 @@ class ProductItemsController {
     log(await ProductItemsService.removeByDetailId(req.query.detailId as string, parseInt(req.query.count as string, 10)));
     res.status(204).send();
   }
+
+  async addByDetailId(req: express.Request, res: express.Response) {
+    for (let i = 0; i < parseInt(req.query.count as string, 10); i += 1) {
+      const mDate = new Date();
+      mDate.setDate(mDate.getDate() + 14);
+      // eslint-disable-next-line no-await-in-loop
+      const mItem = await ProductDetailsService.readById(req.query.detailId as string);
+      // eslint-disable-next-line no-await-in-loop
+      await ProductItemsService.create({
+        detailId: req.query.detailId as string,
+        totalCarbon: mItem.baseCarbon,
+        marketPrice: mItem.producerPrice + 1,
+        expirationDate: mDate,
+      });
+    }
+    res.status(204).send();
+  }
 }
 
 export default new ProductItemsController();

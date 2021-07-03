@@ -46,6 +46,19 @@ class ProductItemsRoutes extends CommonRoutesConfig {
       ProductItemsController.countByDetailId,
     ]);
 
+    this.app.post('/productItems/addByDetailId', [
+      query('detailId').isString(),
+      query('count').isInt(),
+      BodyValidationMiddleware.verifyBodyFieldsErrors,
+      JwtMiddleware.validJWTNeeded,
+      PermissionMiddleware.permissionFlagRequired(
+        PermissionFlag.PRODUCER_PERMISSION
+        | PermissionFlag.SELLER_PERMISSION
+        | PermissionFlag.ALL_PERMISSION,
+      ),
+      ProductItemsController.addByDetailId,
+    ]);
+
     this.app.delete('/productItems/deleteByDetailId', [
       query('detailId').isString(),
       query('count').isInt().optional(),

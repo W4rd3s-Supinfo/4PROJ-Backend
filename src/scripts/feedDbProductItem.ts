@@ -2,7 +2,7 @@ import productDetailModel from '../models/ProductDetail.model';
 import productItemModel from '../models/ProductItem.model';
 
 function feedDB() {
-  productDetailModel.getProductDetails()
+  productDetailModel.getProductDetails(NaN, 0)
     .then((data) => {
     // @ts-ignore
       data.forEach((mSingle) => {
